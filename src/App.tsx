@@ -15,6 +15,7 @@ import {
   HelpCircle,
   Flag,
   Share2,
+  Sliders,
 } from 'lucide-react';
 
 import { PieceColor, EngineEvaluation, GameReviewReport, EnginePersonality, EngineSettings, SavedGame } from './types/chess';
@@ -58,6 +59,7 @@ export default function App() {
     hapticFeedback: true,
     soundEffects: true,
     boardTheme: 'emerald',
+    pieceStyle: 'neo',
   });
 
   // Engine evaluation state
@@ -562,16 +564,23 @@ export default function App() {
             <span className="w-6 h-6 rounded-lg bg-slate-800 flex items-center justify-center text-sm border border-slate-700">
               {boardOrientation === 'w' ? (mode === 'vs_ai' ? personality.avatar : '♟️') : '♔'}
             </span>
-            <div>
-              <span className="font-semibold text-slate-200">
-                {boardOrientation === 'w'
-                  ? mode === 'vs_ai'
-                    ? `${personality.name} (${personality.elo})`
-                    : 'Black'
-                  : 'White'}
-              </span>
+            <div className="flex items-center gap-1.5">
+              {mode === 'vs_ai' && boardOrientation === 'w' ? (
+                <button
+                  onClick={() => setShowPersonalityModal(true)}
+                  className="flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 border border-slate-700 text-slate-200 transition group"
+                  title="Fine-Tune Opponent ELO Rating"
+                >
+                  <span className="font-semibold text-slate-200">{personality.name}</span>
+                  <Sliders className="w-3 h-3 text-cyan-400 group-hover:text-cyan-300" />
+                </button>
+              ) : (
+                <span className="font-semibold text-slate-200">
+                  {boardOrientation === 'w' ? 'Black' : 'White'}
+                </span>
+              )}
               {isEngineThinking && chess.turn() !== playerColor && (
-                <span className="ml-2 text-[10px] text-cyan-400 animate-pulse font-mono">
+                <span className="text-[10px] text-cyan-400 animate-pulse font-mono">
                   Thinking...
                 </span>
               )}
@@ -607,6 +616,7 @@ export default function App() {
               showGhostArrow={settings.showGhostArrow}
               hapticEnabled={settings.hapticFeedback}
               boardTheme={settings.boardTheme}
+              pieceStyle={settings.pieceStyle}
               premoveUci={premoveUci}
               onSetPremove={setPremoveUci}
               coachHighlightSq={coachHighlightSq}
@@ -809,7 +819,10 @@ export default function App() {
           currentPersonality={personality}
           onSelectPersonality={(newP) => {
             setPersonality(newP);
-            startNewGame(playerColor);
+            engineService.setPersonality(newP);
+            if (sanHistory.length === 0) {
+              startNewGame(playerColor);
+            }
           }}
           onClose={() => setShowPersonalityModal(false)}
         />

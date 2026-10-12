@@ -13,6 +13,7 @@ interface ChessBoardProps {
   showGhostArrow?: boolean;
   hapticEnabled?: boolean;
   boardTheme?: 'emerald' | 'ocean' | 'obsidian' | 'wood';
+  pieceStyle?: 'neo' | 'classic' | 'cyberpunk';
   premoveUci?: string | null;
   onSetPremove?: (uci: string | null) => void;
   coachHighlightSq?: Square | null;
@@ -32,6 +33,7 @@ export const ChessBoard: React.FC<ChessBoardProps> = ({
   showGhostArrow = true,
   hapticEnabled = true,
   boardTheme = 'emerald',
+  pieceStyle = 'neo',
   premoveUci = null,
   onSetPremove,
   coachHighlightSq = null,
@@ -390,7 +392,7 @@ export const ChessBoard: React.FC<ChessBoardProps> = ({
                 {/* Chess Piece Render */}
                 {piece && (draggedSquare !== sq || !dragPos) && (
                   <div className="w-[88%] h-[88%] flex items-center justify-center z-15 pointer-events-none transition-transform duration-100">
-                    <ChessPiece type={piece.type} color={piece.color} />
+                    <ChessPiece type={piece.type} color={piece.color} style={pieceStyle} />
                   </div>
                 )}
               </div>
@@ -476,7 +478,7 @@ export const ChessBoard: React.FC<ChessBoardProps> = ({
                 top: `${relY}px`,
               }}
             >
-              <ChessPiece type={piece.type} color={piece.color} />
+              <ChessPiece type={piece.type} color={piece.color} style={pieceStyle} />
             </div>
           );
         })()
@@ -496,7 +498,7 @@ export const ChessBoard: React.FC<ChessBoardProps> = ({
                   onClick={() => executeMove(pendingPromotion.from, pendingPromotion.to, pType)}
                   className="w-14 h-14 p-2 rounded-xl bg-slate-800 hover:bg-slate-700 active:scale-95 border border-slate-600 transition flex items-center justify-center shadow-lg"
                 >
-                  <ChessPiece type={pType} color={chess.turn()} />
+                  <ChessPiece type={pType} color={chess.turn()} style={pieceStyle} />
                 </button>
               ))}
             </div>

@@ -132,6 +132,39 @@ export const EngineSettingsModal: React.FC<EngineSettingsModalProps> = ({
             </div>
           </div>
 
+          {/* Piece Style Selector */}
+          <div className="space-y-1.5">
+            <div className="flex items-center justify-between font-semibold text-slate-300">
+              <span className="flex items-center gap-2">
+                <span className="text-emerald-400 text-sm">♞</span>
+                <span>Piece Aesthetics</span>
+              </span>
+              <span className="text-[10px] text-emerald-400 font-mono capitalize">
+                {settings.pieceStyle || 'neo'}
+              </span>
+            </div>
+            <div className="grid grid-cols-3 gap-2">
+              {[
+                { id: 'neo', name: 'Neo Master', desc: 'Porcelain & Obsidian with 3D Depth' },
+                { id: 'classic', name: 'Classic Staunton', desc: 'Clean Tournament Vector' },
+                { id: 'cyberpunk', name: 'Cyberpunk', desc: 'Neon Emerald & Cyan Glow' },
+              ].map((styleOption) => (
+                <button
+                  key={styleOption.id}
+                  onClick={() => onUpdateSettings({ pieceStyle: styleOption.id as any })}
+                  className={`p-2 rounded-xl flex flex-col items-center text-center border transition ${
+                    (settings.pieceStyle || 'neo') === styleOption.id
+                      ? 'border-emerald-400 bg-slate-800 text-white font-bold ring-1 ring-emerald-500/30'
+                      : 'border-slate-800 bg-slate-900/80 hover:bg-slate-800 text-slate-400'
+                  }`}
+                >
+                  <span className="text-xs">{styleOption.name}</span>
+                  <span className="text-[9px] text-slate-500 mt-0.5 leading-tight">{styleOption.desc}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
           {/* Toggles: Haptics & Sound */}
           <div className="grid grid-cols-2 gap-3">
             <div className="flex items-center justify-between p-2.5 rounded-xl bg-slate-800/40 border border-slate-700/50">

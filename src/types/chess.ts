@@ -109,4 +109,5 @@ export interface EngineSettings {
   hapticFeedback: boolean;
   soundEffects: boolean;
   boardTheme: 'emerald' | 'ocean' | 'obsidian' | 'wood';
+  pieceStyle: 'neo' | 'classic' | 'cyberpunk';
 }

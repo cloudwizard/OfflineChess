@@ -1,5 +1,6 @@
 import { EngineEvaluation, EnginePersonality, EngineSettings } from '../types/chess';
 import { evaluateTablebase } from './tablebase';
+import { getEloTierInfo } from '../utils/eloTiers';
 
 type EvalCallback = (evaluation: EngineEvaluation) => void;
 type BestMoveCallback = (bestMove: string, ponder?: string) => void;
@@ -31,6 +32,7 @@ class EngineService {
     hapticFeedback: true,
     soundEffects: true,
     boardTheme: 'emerald',
+    pieceStyle: 'neo',
   };
   private engineTier: 'nnue' | 'wasm' | 'fallback' = 'wasm';
 
@@ -290,8 +292,11 @@ class EngineService {
     this.sendUci('stop');
     this.sendUci(`position fen ${fen}`);
 
-    const targetDepth = depth || this.currentPersonality?.depth || 12;
-    const targetTime = timeMs || (this.currentPersonality?.playstyle === 'aggressive' ? 1200 : 800);
+    const elo = this.currentPersonality?.elo || 1500;
+    const tier = getEloTierInfo(elo);
+
+    const targetDepth = depth || this.currentPersonality?.depth || tier.estimatedDepth;
+    const targetTime = timeMs || tier.timeMs;
 
     this.isCalculating = true;
     this.sendUci(`go depth ${targetDepth} movetime ${targetTime}`);
