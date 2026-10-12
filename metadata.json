@@ -1,0 +1,6 @@
+{
+  "name": "DeepPocket Chess",
+  "description": "Mobile-first, fully offline PWA chess engine powered by client-side WebAssembly Stockfish with real-time evaluation, post-game coach review, opening explorer, and adaptive ELO.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
